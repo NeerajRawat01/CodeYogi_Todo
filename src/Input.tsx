@@ -1,6 +1,6 @@
-import { FC, HTMLInputTypeAttribute, memo } from "react";
+import { FC,  InputHTMLAttributes, memo } from "react";
 
-type InputProps =  HTMLInputTypeAttribute<HTMLInputElement>
+type InputProps =  InputHTMLAttributes<HTMLInputElement>
 
 const Input: FC<InputProps> = ({placeholder, onChange , value}) => {
   return <>
