@@ -2,12 +2,15 @@ import { FC, memo, useState } from "react";
 import H3 from "./H3";
 import Button from "./Button";
 import Input from "./Input";
+import { todoAdd } from "./actions";
+import { connect } from "react-redux";
+
 type TodoFormProps = {
   onClose: () => void;
   onCreate: (todoTitle: string) => void;
 };
 
-const TodoForm: FC<TodoFormProps> = (props) => {
+const TodoForm: FC<TodoFormProps> = ({onClose,onCreate}) => {
   const [inputValue, setInputValue] = useState("");
 
   const onInputChange = (event: any) => {
@@ -15,11 +18,9 @@ const TodoForm: FC<TodoFormProps> = (props) => {
   };
 
   const saveTodo = () => {
-    props.onCreate(inputValue);
-
+    onCreate(inputValue);
     setInputValue("");
-
-    props.onClose();
+    onClose();
   };
 
   return (
@@ -37,7 +38,7 @@ const TodoForm: FC<TodoFormProps> = (props) => {
           <Button disabled={!inputValue} onClick={saveTodo}>
             Save
           </Button>
-          <Button onClick={props.onClose} theme="secondary">
+          <Button onClick={onClose} theme="secondary">
             Cancel
           </Button>
         </div>
@@ -48,4 +49,6 @@ const TodoForm: FC<TodoFormProps> = (props) => {
 
 TodoForm.defaultProps = {};
 
-export default memo(TodoForm);
+const dispatchMapper = {onCreate: todoAdd}
+
+export default  connect (undefined,dispatchMapper) (memo(TodoForm));

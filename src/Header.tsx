@@ -1,13 +1,16 @@
 import { FC, memo } from "react";
-import { useSelector } from "react-redux";
+import { connect, useSelector } from "react-redux";
+import { todo } from "../models.ts/todo";
 import H3 from "./H3";
 import { completeTodoSelector, IncompleteTodoSelector } from "./selector";
+import { State } from "./store";
 
-type HeaderProps = {};
+type HeaderProps = {
+  incompleteTodos: todo[];
+  completetodos: todo[];
+};
 
-const Header: FC<HeaderProps> = (props) => {
- 
-
+const Header: FC<HeaderProps> = ({ incompleteTodos, completetodos }) => {
   const IncompleteTodo = useSelector(IncompleteTodoSelector);
   const CompleteTodo = useSelector(completeTodoSelector);
   return (
@@ -16,10 +19,12 @@ const Header: FC<HeaderProps> = (props) => {
         <span className="text-xl font-medium">CodeYogi Todo</span>
         <div className="flex space-x-4">
           <H3>
-            Incomplete: <span className="text-red-500">{IncompleteTodo.length}</span>
+            Incomplete:
+            <span className="text-red-500">{incompleteTodos.length}</span>
           </H3>
-          <H3  >
-            Completed: <span className="text-green-500">{CompleteTodo.length}</span>
+          <H3>
+            Completed:
+            <span className="text-green-500">{CompleteTodo.length}</span>
           </H3>
         </div>
       </div>
@@ -29,4 +34,12 @@ const Header: FC<HeaderProps> = (props) => {
 
 Header.defaultProps = {};
 
+const TodosCount = (s: State) => {
+  return {
+    completetodos: completeTodoSelector(s),
+    incompleteTodos: IncompleteTodoSelector(s),
+  };
+};
 export default memo(Header);
+
+export const HeaderWithCount = connect(TodosCount)(Header);
